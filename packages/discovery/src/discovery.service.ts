@@ -20,9 +20,14 @@ import {
  */
 export const withMetaAtKey: (
   key: MetaKey
-) => Filter<DiscoveredClass> = key => component =>
-  Reflect.getMetadata(key, component.classType) ||
-  Reflect.getMetadata(key, component.instance.constructor);
+) => Filter<DiscoveredClass> = key => component => {
+  try {
+    return Reflect.getMetadata(key, component.classType);
+  } catch (e) {}
+  try {
+    return Reflect.getMetadata(key, component.instance.constructor);
+  } catch (e) {}
+};
 
 @Injectable()
 export class DiscoveryService {
